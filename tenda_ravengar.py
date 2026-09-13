@@ -1277,6 +1277,25 @@ with tab13:
 st.markdown("""
 <div class='rodape-ravengar'>
     ✦ EXPLORANDO OS MISTÉRIOS DA MENTE E DO DESTINO ✦<br>
+# ── SALVAR DADOS ──
+import json as _json_rv
+col_rv1, col_rv2 = st.columns(2)
+with col_rv1:
+    _dados_rv = {k: st.session_state.get(k) for k in list(st.session_state.keys()) if not k.startswith('_')}
+    st.download_button("💾 Salvar dados (.json)",
+        data=_json_rv.dumps(_dados_rv, ensure_ascii=False, indent=2, default=str),
+        file_name=f"tenda_ravengar_{st.session_state.get('nome_aventureiro','user')}.json",
+        mime="application/json", key="dl_sv_ravengar")
+with col_rv2:
+    _arq_rv = st.file_uploader("📂 Carregar dados:", type=["json"], key="ul_sv_ravengar")
+    if _arq_rv:
+        try:
+            for _k, _v in _json_rv.loads(_arq_rv.read().decode()).items():
+                st.session_state[_k] = _v
+            st.success("✅ Dados carregados!"); st.rerun()
+        except: st.error("Arquivo inválido.")
+
+
     © 2026 TENDA DO RAVENGAR
 </div>
 """, unsafe_allow_html=True)
