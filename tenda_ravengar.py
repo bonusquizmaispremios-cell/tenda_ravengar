@@ -9,6 +9,18 @@ from datetime import datetime
 st.set_page_config(page_title="Tenda do Ravengar", page_icon="🔮", layout="wide")
 
 st.markdown("""
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+[data-testid="stToolbar"] {visibility: hidden;}
+[data-testid="stDecoration"] {visibility: hidden;}
+[data-testid="stStatusWidget"] {visibility: hidden;}
+</style>
+""", unsafe_allow_html=True)
+
+
+st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -498,9 +510,9 @@ if 'chave_api' not in st.session_state or not st.session_state.chave_api:
         st.markdown("""
         <div style='background:#FFF0F5;border:1px solid #FFB7C5;border-radius:12px;
         padding:14px 18px;margin-bottom:20px;font-size:0.9em;color:#000;line-height:1.8;text-align:center;'>
-        🔒 <strong>Exclusivo para Associados Quiz Com Prêmios</strong><br>
-        🔗 <a href='https://quizcompremios.com.br/' target='_blank'
-        style='color:#C2185B;font-weight:600;text-decoration:none;'>quizcompremios.com.br</a>
+        🔒 <strong>Exclusivo para Associados MeusAgentesIA.com.br</strong><br>
+        🔗 <a href='https://meusagentesia.com.br/' target='_blank'
+        style='color:#C2185B;font-weight:600;text-decoration:none;'>meusagentesia.com.br</a>
         </div>
         """, unsafe_allow_html=True)
         chave_digitada = st.text_input("🔑 Digite sua Chave Groq API para entrar:", type="password", key="input_chave_entrada")
@@ -1273,29 +1285,31 @@ with tab13:
                     else:
                         st.success("✅ Esta aula já foi concluída!")
 
-# --- RODAPÉ ---
-st.markdown("""
-<div class='rodape-ravengar'>
-    ✦ EXPLORANDO OS MISTÉRIOS DA MENTE E DO DESTINO ✦<br>
-# ── SALVAR DADOS ──
+# --- SALVAR / CARREGAR DADOS ---
+st.markdown("<div class='rodape-ravengar'>✦ EXPLORANDO OS MISTÉRIOS DA MENTE E DO DESTINO ✦</div>", unsafe_allow_html=True)
+
 import json as _json_rv
-col_rv1, col_rv2 = st.columns(2)
-with col_rv1:
-    _dados_rv = {k: st.session_state.get(k) for k in list(st.session_state.keys()) if not k.startswith('_')}
-    st.download_button("💾 Salvar dados (.json)",
-        data=_json_rv.dumps(_dados_rv, ensure_ascii=False, indent=2, default=str),
-        file_name=f"tenda_ravengar_{st.session_state.get('nome_aventureiro','user')}.json",
-        mime="application/json", key="dl_sv_ravengar")
-with col_rv2:
-    _arq_rv = st.file_uploader("📂 Carregar dados:", type=["json"], key="ul_sv_ravengar")
-    if _arq_rv:
-        try:
-            for _k, _v in _json_rv.loads(_arq_rv.read().decode()).items():
-                st.session_state[_k] = _v
-            st.success("✅ Dados carregados!"); st.rerun()
-        except: st.error("Arquivo inválido.")
+with st.expander("💾 Salvar / Carregar meus dados", expanded=False):
+    col_rv1, col_rv2 = st.columns(2)
+    with col_rv1:
+        _dados_rv = {k: st.session_state.get(k) for k in list(st.session_state.keys()) if not k.startswith('_')}
+        st.download_button("💾 Salvar dados (.json)",
+            data=_json_rv.dumps(_dados_rv, ensure_ascii=False, indent=2, default=str),
+            file_name=f"tenda_ravengar_{st.session_state.get('nome_aventureiro','user')}.json",
+            mime="application/json", key="dl_sv_ravengar")
+    with col_rv2:
+        _arq_rv = st.file_uploader("📂 Carregar dados:", type=["json"], key="ul_sv_ravengar")
+        if _arq_rv:
+            try:
+                for _k, _v in _json_rv.loads(_arq_rv.read().decode()).items():
+                    st.session_state[_k] = _v
+                st.success("✅ Dados carregados!"); st.rerun()
+            except:
+                st.error("Arquivo inválido.")
 
-
-    © 2026 TENDA DO RAVENGAR
-</div>
-""", unsafe_allow_html=True)
+# --- RODAPÉ ---
+st.markdown(
+    "<div style='text-align:center;color:#999;font-size:0.8em;margin-top:30px;'>"
+    "© 2026 TENDA DO RAVENGAR · MeusAgentesIA.com.br"
+    "</div>", unsafe_allow_html=True
+)
